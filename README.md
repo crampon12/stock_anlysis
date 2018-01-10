@@ -5,5 +5,7 @@
 
 参照したサイト。初心者なのでその他のサイトからも色々知恵を借りました。
 http://sinhrks.hatenablog.com/entry/2015/02/04/002258
+
 http://www.madopro.net/entry/MachineLearningForTrading
+
 http://www.tsjshg.info/udemy/notebooks.html
