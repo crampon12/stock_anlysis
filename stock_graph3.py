@@ -1,10 +1,12 @@
 import pandas as pd
 from pandas import Series, DataFrame
 import matplotlib.pyplot as plt
-#from matplotlib.ticker import EngFormatter
+
+# financeはmatplotlib 2.2で削除予定、以後はmpl_financeを有効にすること
 from matplotlib.finance import candlestick2_ohlc, volume_overlay
 #from mpl_finance import candlestick2_ohlc, volume_overlay
 from matplotlib.ticker import EngFormatter
+from matplotlib.widgets import Cursor
 
 def get_quote_yahoojp(code, start=None, end=None, interval='d'):
     base = 'https://info.finance.yahoo.co.jp/history/?code={0}.T&{1}&{2}&tm={3}&p={4}'
@@ -40,40 +42,31 @@ def get_quote_yahoojp(code, start=None, end=None, interval='d'):
     result = result.sort_index()
     return result
 
-
+# 銘柄番号を指定すること
 stock_num = 7203
+# 開始年月日を指定
 start = '2017-10-01'
+# 終了日時を指定、日時指定または現在日時
 # end   = '2017-12-01'  # End Date set
 end = pd.to_datetime(pd.datetime.now())  # End Data is Today
 
+# yahooからデータを取得する関数を呼び出し
 stock_name = get_quote_yahoojp(stock_num, start=start, end=end)
-# stock_name = stock_name[-30:]
-
-# stock_name.plot(kind='ohlc')
-# plt.grid(color='black', linestyle='-')
-# plt.show()
-
-# stock_name.asfreq('B').plot(kind='ohlc')
-# plt.subplots_adjust(bottom=0.25)
-# plt.grid(color='black', linestyle='-')
-# plt.show()
-
 
 # 2016年上半期の日経平均のデータを読み込む
 start_date = "2017-10-01"
 end_date = "2018-1-9"
 df = pd.DataFrame(index=pd.date_range(start_date, end_date))
-df = pd.DataFrame(index=pd.date_range(start, end))
+#df = pd.DataFrame(index=pd.date_range(start, end))
 df = df.join(stock_name)
 df = df.dropna()
 df.index.names = ['Date']
 
 # ローソク足をプロット
-#fig = plt.figure(figsize=(8, 5))
-fig = plt.figure()
-ax = fig.add_subplot(2, 1, 1)
+fig = plt.figure(figsize=(8,6))
+ax = fig.add_subplot(2, 1, 1) # 描画領域2行1列の1行目に描画する
 candlestick2_ohlc(ax, df["Open"], df["High"], df["Low"], df["Adj Close"], width=0.9, colorup="b", colordown="r")
-ax.set_xticklabels(df.index[::10].strftime("%Y-%m-%d"), rotation=90)  # 2017.12.31
+ax.set_xticklabels(df.index[::10].strftime("%m-%d"), rotation=45)  # 2017.12.31
 ax.set_xlim([0, df.shape[0]])  # 横軸の範囲はデータの個数(df.shape[0]個)までに変更しておく
 ax.set_ylabel("Price")
 
@@ -95,7 +88,7 @@ formatter = EngFormatter()
 ax2.yaxis.set_major_formatter(formatter)
 #plt.show()
 
-""" Plot Adj Close Graph"""
+""" Plot Adj Close Graph  終値のグラフ描画処理"""
 # 5days, 25days移動平均の計算
 MA5=stock_name['Adj Close'].rolling(window=5).mean()
 MA25=stock_name['Adj Close'].rolling(window=25).mean()
@@ -109,36 +102,24 @@ ma5_df = ma5_df.rename(columns={'Adj Close':'MA5'})
 ma25_df = ma25_df.rename(columns={'Adj Close':'MA25'})
 # Marge to "stock_name" and "ma5_df"
 stock_list=stock_name.join(ma5_df)
-
 # Marge to "stock_name" and "ma25_df"
 stock_list=stock_list.join(ma25_df)
-#stock_list.plot()
 
-import numpy as np
-#x = np.arange(0., 10., 0.1)
-#s = np.sin(x)
-#c = np.cos(x)
-
+# 上のローソク足グラフとDataFrameの同じ画面での描画が上手くできなかったので
+# 行列に変換してから描画する。
 array = stock_list.as_matrix()
-array = array.T
-print(array[0])
-ax3 = fig.add_subplot(2,1,2)
-#ax3.set_xticklabels(stock_list.index[::10].strftime("%Y-%m-%d"), rotation=90)  # 2017.12.31
-#ax3.plot(x=ax3.set_xticklabels(stock_list.index[::10].strftime("%Y-%m-%d")), y=stock_list['MA5'])
-#ax3.plot(x=ax3.set_xticklabels(stock_list.index[::10].strftime("%Y-%m-%d"), rotation=90), y=stock_list['Adj Close'])
-ax3.set_xticklabels(stock_list.index[::10].strftime("%Y-%m-%d"), rotation=90)  # 2017.12.31
-#ax3.plot(ax3.set_xticklabels(stock_list.index[::10].stfrtime("%Y-%m-%d")), array[0])
-ax3.plot( array[0] )
+array = array.T # 転置行列
+#print(array[5]) # for debug
 
-#ax3 = stock_list.plot(y=['Adj Close'])
+ax3 = fig.add_subplot(2,1,2) # 2行目に描画する
+ax3.set_xticklabels(stock_list.index[::10].strftime("%Y-%m-%d"), rotation=45)  # 2017.12.31
+ax3.plot(array[5], label='Adj Close')
+ax3.plot(array[6], label='MA5')
+ax3.plot(array[7], label='MA25')
+ax3.legend(loc=2)
 
 ax3.set_xlim([0, stock_list.shape[0]])  # 横軸の範囲はデータの個数(df.shape[0]個)までに変更しておく
 ax3.set_ylabel("Price")
-#ax3.set_ylim([0,stock_list["Adj Close"].max()])
-#stock_list['Adj Close'].plot(ax=ax3[2,1,2]); ax3[2,1,2].set_title('A')
-#stock_list.plot(y=['Adj Close'])
-#ax3.stock_list['Adj Close'].plot(legend=True, figsize=(8,5))
-#ax3.stock_list['MA5'].plot(legend=True)
-#ax3.stock_list['MA25'].plot(legend=True)
+cursor = Cursor(ax3, useblit=True, color='red', linewidth=1)
 plt.grid(color='y', linestyle='-')
 plt.show()
