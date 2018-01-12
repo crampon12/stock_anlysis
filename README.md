@@ -1,6 +1,7 @@
 # stock_anlysis
 株価のグラフ　作成
 ローソク足、出来高、終値、移動平均線(5日、25日)を描画する2行2列のグラフです。  
+Yahooファイナンスからデータを取得します。<BR>
 
 "stock_graph3.py"を実行すると得られるグラフです。  
 <img src="https://github.com/crampon12/stock_anlysis/blob/master/sample_figure.png" width=50%>
