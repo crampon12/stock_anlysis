@@ -5,7 +5,9 @@
 "stock_graph3.py"を実行すると得られるグラフです。
 <img src="https://github.com/crampon12/stock_anlysis/blob/master/sample_figure.png" width=50%>
 
-"stock_compare.py"を実行すると得られるグラフは2種あります。Mac Book Airの13インチモニタでは縦が入りきりません。
+
+"stock_compare.py"を実行すると得られるグラフは2種あります。
+Mac Book Airの13インチモニタでは縦が入りきりません。
 <img src="https://github.com/crampon12/stock_anlysis/blob/master/seaboan.png" width=50%>
 
 <img src="https://github.com/crampon12/stock_anlysis/blob/master/heatmap.png" width=50%>
