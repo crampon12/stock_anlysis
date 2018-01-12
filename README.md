@@ -9,7 +9,7 @@
 Mac Book Airの13インチモニタでは縦が入りきりません。<BR>
 <img src="https://github.com/crampon12/stock_anlysis/blob/master/seaboan.png" width=50%>
 
-<img src="https://github.com/crampon12/stock_anlysis/blob/master/heatmap.png" width=50%>
+<img src="https://github.com/crampon12/stock_anlysis/blob/master/heatmap.png" width=30%>
 
 
 参照したサイト。初心者なのでその他のサイトからも色々知恵を借りました。  
