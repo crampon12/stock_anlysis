@@ -4,6 +4,7 @@
 ローソク足、出来高、終値、移動平均線(5日、25日)を描画する2行2列のグラフです。
 
 実行すると得られるグラフ例です。
+
 ![Alt text](https://github.com/crampon12/stock_anlysis/blob/master/sample_figure.png　=300x300)
 
 
